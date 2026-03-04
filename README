@@ -1,1 +1,124 @@
-README
+Step 1. Prepare Asset Paths in Google Earth Engine
+
+Before running the scripts, create dedicated asset folders in your GEE account for storing intermediate and final outputs.
+
+You need to define four separate asset paths:
+
+Geographical feature data
+(e.g., static spatial predictors such as latitude, longitude, DEM, etc.)
+
+Sentinel-3 (S3) processed data
+
+Vegetation feature data
+
+SIF reference / intermediate data
+
+Each category should have its own GEE asset path.
+Example structure:
+
+users/your_username/ProjectName/Geo_features/
+users/your_username/ProjectName/S3_processed/
+users/your_username/ProjectName/Vegetation_features/
+users/your_username/ProjectName/SIF_data/
+
+Make sure all paths are correctly defined in the corresponding scripts before execution.
+
+Step 2. Download my_eogpr
+
+Download the trained my_eogpr model from this repository (or the provided source).
+
+Place it in your working environment.
+
+Before running the GPR prediction step, ensure that:
+
+my_eogpr is properly imported
+
+All dependencies are installed
+
+The model file is accessible from your runtime environment
+
+Step 3. Run the Preprocessing and Prediction Scripts
+
+Run the following scripts in order:
+
+3.1 Run Geo_features_function
+
+This script generates geographical feature data and exports it to the predefined GEE asset path.
+
+At this stage, you can configure:
+
+Time range
+
+Spatial extent
+
+Spatial resolution
+
+3.2 Run S3_process
+
+This script processes Sentinel-3 OLCI data and exports the results to the S3 asset path defined in Step 1.
+
+You can also configure:
+
+Start and end dates
+
+Study region
+
+Output resolution
+
+3.3 Run RunPyeogpr
+
+Before executing this script:
+
+Load the my_eogpr model into the environment.
+
+This script:
+
+Loads the previously generated features
+
+Applies the Gaussian Process Regression (GPR) model
+
+Exports the prediction results to the specified asset path
+
+Ensure that all input asset paths are correctly set.
+
+Step 4. Generate Final SIF Output
+
+Finally, run:
+
+Step_4_SIF_output
+
+This script:
+
+Loads all intermediate assets generated in previous steps
+
+Produces the final SIF dataset
+
+Exports the SIF results to the asset path defined in Step 1
+
+The output SIF data will be stored in your designated GEE asset folder.
+
+Workflow Summary
+
+Create asset paths in GEE
+
+Download and prepare my_eogpr
+
+Run:
+
+Geo_features_function
+
+S3_process
+
+RunPyeogpr (after loading my_eogpr)
+
+Run Step_4_SIF_output to generate final SIF products
+
+Notes
+
+All parameters (time range, region, resolution) can be configured inside the scripts.
+
+Ensure consistent projection and resolution across all steps.
+
+Verify that all asset paths exist before running exports.
+
+Large-scale processing may require batching by date or region.
